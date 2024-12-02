@@ -9,7 +9,12 @@ namespace RoomBookingApp.Core.Tests
 
         internal RoomBookingResult BookRoom(RoomBookingRequest bookingRequest)
         {
-            throw new NotImplementedException();
+            return new RoomBookingResult
+            {
+                BookingDate = bookingRequest.BookingDate,
+                Email = bookingRequest.Email,
+                FullName = bookingRequest.FullName
+            };
         }
     }
 }
