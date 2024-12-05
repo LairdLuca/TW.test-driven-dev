@@ -6,6 +6,12 @@ namespace RoomBookingApp.Core.Tests
 {
     public class RoomBookingRequestProcessorTest
     {
+        private RoomBookingRequestProcessor _processor;
+        public RoomBookingRequestProcessorTest()
+        {
+            _processor = new RoomBookingRequestProcessor();
+        }
+
         [Fact]
         public void Should_Return_Room_Booking_Response_With_Request_Values()
         {
@@ -17,10 +23,8 @@ namespace RoomBookingApp.Core.Tests
                 Email = "test@request.com",
             };
 
-            var processor = new RoomBookingRequestProcessor();
-
             // Act
-            RoomBookingResult result = processor.BookRoom(bookingRequest);
+            RoomBookingResult result = _processor.BookRoom(bookingRequest);
 
             // Assert
             //Assert.NotNull(result);         // without Shouldly
@@ -33,6 +37,19 @@ namespace RoomBookingApp.Core.Tests
             result.Email.ShouldBe(bookingRequest.Email);
             result.BookingDate.ShouldBe(bookingRequest.BookingDate);
 
+        }
+
+        [Fact]
+        public void Should_Throw_Exception_For_Null_Request()
+        {
+            // Arrange
+            //var processor = new RoomBookingRequestProcessor();
+
+            // Act
+            var exception = Should.Throw<ArgumentNullException>(() => _processor.BookRoom(null));
+
+            // Assert
+            exception.ParamName.ShouldBe("bookingRequest");
         }
     }
 }
