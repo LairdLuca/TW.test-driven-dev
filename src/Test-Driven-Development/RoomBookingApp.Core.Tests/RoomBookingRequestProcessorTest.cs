@@ -1,4 +1,7 @@
-﻿using RoomBookingApp.Core.Models;
+﻿using Moq;
+using RoomBookingApp.Core.DataServices;
+using RoomBookingApp.Core.Domain;
+using RoomBookingApp.Core.Models;
 using RoomBookingApp.Core.Processors;
 using Shouldly;
 
@@ -7,24 +10,35 @@ namespace RoomBookingApp.Core.Tests
     public class RoomBookingRequestProcessorTest
     {
         private RoomBookingRequestProcessor _processor;
+        private RoomBookingRequest _request;
+        private Mock<IRoomBookingService> _roomBookingServiceMock;
+
         public RoomBookingRequestProcessorTest()
         {
-            _processor = new RoomBookingRequestProcessor();
-        }
-
-        [Fact]
-        public void Should_Return_Room_Booking_Response_With_Request_Values()
-        {
-            // Arrange
-            var bookingRequest = new RoomBookingRequest
+            _request = new RoomBookingRequest
             {
                 BookingDate = DateTime.Now,
                 FullName = "Test Name",
                 Email = "test@request.com",
             };
 
+            _roomBookingServiceMock = new Mock<IRoomBookingService>();
+            _processor = new RoomBookingRequestProcessor(_roomBookingServiceMock.Object);
+        }
+
+        [Fact]
+        public void Should_Return_Room_Booking_Response_With_Request_Values()
+        {
+            // Arrange
+            //var bookingRequest = new RoomBookingRequest
+            //{
+            //    BookingDate = DateTime.Now,
+            //    FullName = "Test Name",
+            //    Email = "test@request.com",
+            //};
+
             // Act
-            RoomBookingResult result = _processor.BookRoom(bookingRequest);
+            RoomBookingResult result = _processor.BookRoom(_request);
 
             // Assert
             //Assert.NotNull(result);         // without Shouldly
@@ -33,9 +47,9 @@ namespace RoomBookingApp.Core.Tests
             //Assert.Equal(bookingRequest.BookingDate, result.BookingDate);
 
             result.ShouldNotBeNull();       // with Shouldly
-            result.FullName.ShouldBe(bookingRequest.FullName);
-            result.Email.ShouldBe(bookingRequest.Email);
-            result.BookingDate.ShouldBe(bookingRequest.BookingDate);
+            result.FullName.ShouldBe(_request.FullName);
+            result.Email.ShouldBe(_request.Email);
+            result.BookingDate.ShouldBe(_request.BookingDate);
 
         }
 
@@ -50,6 +64,27 @@ namespace RoomBookingApp.Core.Tests
 
             // Assert
             exception.ParamName.ShouldBe("bookingRequest");
+        }
+
+        [Fact]
+        public void Should_Save_Room_Booking_Request()
+        {
+            RoomBooking savedRoomBooking = null;
+            _roomBookingServiceMock
+                .Setup(x => x.Save(It.IsAny<RoomBooking>()))
+                .Callback<RoomBooking>(booking =>
+                {
+                    savedRoomBooking = booking;
+                });
+
+            _processor.BookRoom(_request);
+
+            _roomBookingServiceMock.Verify(x => x.Save(It.IsAny<RoomBooking>()), Times.Once);
+
+            savedRoomBooking.ShouldNotBeNull();
+            savedRoomBooking.FullName.ShouldBe(_request.FullName);
+            savedRoomBooking.Email.ShouldBe(_request.Email);
+            savedRoomBooking.BookingDate.ShouldBe(_request.BookingDate);
         }
     }
 }
