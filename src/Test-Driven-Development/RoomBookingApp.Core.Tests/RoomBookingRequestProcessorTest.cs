@@ -23,7 +23,7 @@ namespace RoomBookingApp.Core.Tests
                 Email = "test@request.com",
             };
 
-            _availableRooms = new List<Room>{ new Room() };
+            _availableRooms = new List<Room>{ new Room() { Id = 1 } };
 
             _roomBookingServiceMock = new Mock<IRoomBookingService>();
             _roomBookingServiceMock
@@ -92,6 +92,7 @@ namespace RoomBookingApp.Core.Tests
             savedRoomBooking.FullName.ShouldBe(_request.FullName);
             savedRoomBooking.Email.ShouldBe(_request.Email);
             savedRoomBooking.BookingDate.ShouldBe(_request.BookingDate);
+            savedRoomBooking.RoomId.ShouldBe(_availableRooms.First().Id);
         }
 
         [Fact]
