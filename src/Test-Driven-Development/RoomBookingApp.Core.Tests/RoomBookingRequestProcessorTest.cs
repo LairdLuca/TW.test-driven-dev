@@ -100,8 +100,6 @@ namespace RoomBookingApp.Core.Tests
             _availableRooms.Clear();
             _processor.BookRoom(_request);
             _roomBookingServiceMock.Verify(x => x.Save(It.IsAny<RoomBooking>()), Times.Never);
-
-
         }
     }
 }
