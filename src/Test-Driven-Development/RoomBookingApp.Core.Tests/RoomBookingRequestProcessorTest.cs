@@ -12,6 +12,7 @@ namespace RoomBookingApp.Core.Tests
         private RoomBookingRequestProcessor _processor;
         private RoomBookingRequest _request;
         private Mock<IRoomBookingService> _roomBookingServiceMock;
+        private List<Room> _availableRooms;
 
         public RoomBookingRequestProcessorTest()
         {
@@ -22,7 +23,13 @@ namespace RoomBookingApp.Core.Tests
                 Email = "test@request.com",
             };
 
+            _availableRooms = new List<Room>{ new Room() };
+
             _roomBookingServiceMock = new Mock<IRoomBookingService>();
+            _roomBookingServiceMock
+                .Setup(x => x.GetAvailableRooms(It.IsAny<DateTime>()))
+                .Returns(_availableRooms);
+
             _processor = new RoomBookingRequestProcessor(_roomBookingServiceMock.Object);
         }
 
@@ -85,6 +92,16 @@ namespace RoomBookingApp.Core.Tests
             savedRoomBooking.FullName.ShouldBe(_request.FullName);
             savedRoomBooking.Email.ShouldBe(_request.Email);
             savedRoomBooking.BookingDate.ShouldBe(_request.BookingDate);
+        }
+
+        [Fact]
+        public void Should_Not_Save_Room_Booking_Request_If_none_Available()
+        {
+            _availableRooms.Clear();
+            _processor.BookRoom(_request);
+            _roomBookingServiceMock.Verify(x => x.Save(It.IsAny<RoomBooking>()), Times.Never);
+
+
         }
     }
 }
