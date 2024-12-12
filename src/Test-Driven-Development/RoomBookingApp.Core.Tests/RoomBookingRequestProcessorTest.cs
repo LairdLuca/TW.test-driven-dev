@@ -24,7 +24,7 @@ namespace RoomBookingApp.Core.Tests
                 Email = "test@request.com",
             };
 
-            _availableRooms = new List<Room>{ new Room() { Id = 1 } };
+            _availableRooms = new List<Room> { new Room() { Id = 1 } };
 
             _roomBookingServiceMock = new Mock<IRoomBookingService>();
             _roomBookingServiceMock
@@ -109,13 +109,35 @@ namespace RoomBookingApp.Core.Tests
         [InlineData(BookingSuccessFlag.Success, true)]
         public void Should_Return_SuccessOrFailure_Flag_In_Result(BookingSuccessFlag bookingSuccessFlag, bool isAvailable)
         {
-            if(!isAvailable)
+            if (!isAvailable)
             {
                 _availableRooms.Clear();
             }
 
             var result = _processor.BookRoom(_request);
             bookingSuccessFlag.ShouldBe(result.Flag);
+        }
+
+        [Theory]
+        [InlineData(1, true)]
+        [InlineData(null, false)]
+        public void Should_Return_RoomBookingId_In_Result(int? roomBookingId, bool isAvailable)
+        {
+            if (!isAvailable)
+            {
+                _availableRooms.Clear();
+            }
+            else
+            {
+                _roomBookingServiceMock
+                    .Setup(x => x.Save(It.IsAny<RoomBooking>()))
+                    .Callback<RoomBooking>(booking =>
+                    {
+                        booking.Id = roomBookingId.Value;
+                    });
+            }
+            var result = _processor.BookRoom(_request);
+            result.RoomBookingId.ShouldBe(roomBookingId);
         }
     }
 }
