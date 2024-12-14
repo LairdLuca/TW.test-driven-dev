@@ -2,6 +2,7 @@
 using RoomBookingApp.Core.Domain;
 using RoomBookingApp.Core.Enums;
 using RoomBookingApp.Core.Models;
+using RoomBookingApp.Domain.BaseModels;
 
 namespace RoomBookingApp.Core.Processors
 {

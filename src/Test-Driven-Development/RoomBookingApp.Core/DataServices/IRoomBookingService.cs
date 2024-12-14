@@ -1,4 +1,5 @@
 ﻿using RoomBookingApp.Core.Domain;
+using RoomBookingApp.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,5 @@ namespace RoomBookingApp.Core.DataServices
         void Save(RoomBooking roomBooking);
 
         IEnumerable<Room> GetAvailableRooms(DateTime date);
-    }
-    public class RoomBookingService
-    {
     }
 }
