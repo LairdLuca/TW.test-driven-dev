@@ -1,7 +1,6 @@
-﻿using RoomBookingApp.Domain;
-using RoomBookingApp.Domain.BaseModels;
+﻿using RoomBookingApp.Domain.BaseModels;
 
-namespace RoomBookingApp.Core.Domain
+namespace RoomBookingApp.Domain
 {
     public class RoomBooking : RoomBookingBase
     {
