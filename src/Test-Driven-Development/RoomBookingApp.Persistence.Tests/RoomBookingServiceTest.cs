@@ -27,18 +27,18 @@ namespace RoomBookingApp.Persistence.Tests
             context.Add(new Room { Id = 2, Name = "Conference Room B" });
             context.Add(new Room { Id = 3, Name = "Conference Room C" });
 
-            context.Add(new RoomBooking { Id = 1, RoomId = 1, BookingDate = date });
-            context.Add(new RoomBooking { Id = 2, RoomId = 2, BookingDate = date.AddDays(-1) });
+            context.Add(new RoomBooking { Id = 1, RoomId = 1, BookingDate = date, Email = "", FullName = "" });
+            context.Add(new RoomBooking { Id = 2, RoomId = 2, BookingDate = date.AddDays(-1), Email = "", FullName = "" });
 
             context.SaveChanges();
 
             var roomBookingService = new RoomBookingService(context);
 
             // Act
-            var availableRooms = roomBookingService.GetAvailableRooms(DateTime.Now);
+            var availableRooms = roomBookingService.GetAvailableRooms(date);
 
             // Assert
-            Assert.Equal(availableRooms.Count(), 2);
+            Assert.Equal(2, availableRooms.Count());
             Assert.Contains(availableRooms, r => r.Id == 2);
             Assert.Contains(availableRooms, r => r.Id == 3);
             Assert.DoesNotContain(availableRooms, r => r.Id == 1);
