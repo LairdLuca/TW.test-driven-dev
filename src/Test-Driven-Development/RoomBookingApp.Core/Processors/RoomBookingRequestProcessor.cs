@@ -6,7 +6,11 @@ using RoomBookingApp.Domain.BaseModels;
 
 namespace RoomBookingApp.Core.Processors
 {
-    public class RoomBookingRequestProcessor
+    public interface IRoomBookingRequestProcessor
+    {
+        RoomBookingResult BookRoom(RoomBookingRequest bookingRequest);
+    }
+    public class RoomBookingRequestProcessor : IRoomBookingRequestProcessor
     {
         public IRoomBookingService _roomBookingService { get; }
 
@@ -15,11 +19,11 @@ namespace RoomBookingApp.Core.Processors
             _roomBookingService = roomBookingService;
         }
 
-        
+
 
         public RoomBookingResult BookRoom(RoomBookingRequest bookingRequest)
         {
-            if(bookingRequest is null)
+            if (bookingRequest is null)
             {
                 throw new ArgumentNullException(nameof(bookingRequest));
             }
