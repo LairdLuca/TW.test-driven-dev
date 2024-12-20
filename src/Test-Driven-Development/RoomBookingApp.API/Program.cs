@@ -1,4 +1,8 @@
 
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using RoomBookingApp.Persistence;
+
 namespace RoomBookingApp.API
 {
     public class Program
@@ -12,6 +16,16 @@ namespace RoomBookingApp.API
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            // db context in memory for testing
+            var connString = "DataSource=:memory";
+            var conn = new SqliteConnection(connString);
+            conn.Open();
+
+            builder.Services.AddDbContext<RoomBookingAppDbContext>(options =>
+            {
+                options.UseSqlite(conn);
+            });
 
             var app = builder.Build();
 
