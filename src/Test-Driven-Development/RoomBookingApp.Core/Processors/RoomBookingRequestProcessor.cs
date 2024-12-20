@@ -10,6 +10,7 @@ namespace RoomBookingApp.Core.Processors
     {
         RoomBookingResult BookRoom(RoomBookingRequest bookingRequest);
     }
+
     public class RoomBookingRequestProcessor : IRoomBookingRequestProcessor
     {
         public IRoomBookingService _roomBookingService { get; }
@@ -18,8 +19,6 @@ namespace RoomBookingApp.Core.Processors
         {
             _roomBookingService = roomBookingService;
         }
-
-
 
         public RoomBookingResult BookRoom(RoomBookingRequest bookingRequest)
         {
