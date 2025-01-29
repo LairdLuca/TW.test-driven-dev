@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 using RoomBookingApp.Domain;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,10 @@ namespace RoomBookingApp.Persistence
 {
     public class RoomBookingAppDbContext : DbContext
     {
+        public RoomBookingAppDbContext()
+        {
+        }
+
         public RoomBookingAppDbContext(DbContextOptions<RoomBookingAppDbContext> options) : base(options)
         {
         }
@@ -28,4 +34,5 @@ namespace RoomBookingApp.Persistence
             );
         }
     }
+
 }
