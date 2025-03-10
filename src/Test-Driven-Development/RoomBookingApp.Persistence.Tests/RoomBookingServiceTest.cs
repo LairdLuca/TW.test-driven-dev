@@ -13,7 +13,7 @@ namespace RoomBookingApp.Persistence.Tests
     {
 
         [Fact]
-        public void Should_Return_Available_Rooms()
+        public void Should_Return_Available_Rooms()   
         {
             // Arrange
             var date = new DateTime(2021, 1, 1);
